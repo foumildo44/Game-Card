@@ -1,5 +1,5 @@
 // src/ui/DeckUI.js
-// ✅ AJOUT : Filtres de rareté
+// ✅ MODIFIÉ : renderInspector() génère le HTML du nouveau tooltip unifié.
 
 class DeckUI {
   constructor(uiManager, gameManager) {
@@ -14,7 +14,7 @@ class DeckUI {
     this.activeDeckTab = 0;
     this.sortBy = 'rarity';
     this.sortOrder = 'desc'; 
-    this.rarityFilter = 'all'; // ✅ NOUVEAU : Filtre de rareté
+    this.rarityFilter = 'all';
     
     this.tooltipElement = null;
     
@@ -25,6 +25,17 @@ class DeckUI {
       'rare': 2,
       'common': 1,
       'basic': 0
+    };
+    
+    // ✅ NOUVEAU : Map d'icônes
+    this.elementIconMap = {
+      fire: '🔥',
+      water: '💧',
+      air: '💨',
+      earth: '🌍',
+      omni: '🌟',
+      void: '💀',
+      alliance: '🤝'
     };
   }
 
@@ -37,7 +48,6 @@ class DeckUI {
     const deckSize = 6;
     const cardsInDeck = deckCardIds.filter(id => id != null).length;
     
-    // ✅ Applique le filtre de rareté
     let collectionCards = Object.keys(player.collection)
       .filter(cardId => !deckCardIds.includes(cardId))
       .map(cardId => {
@@ -52,12 +62,10 @@ class DeckUI {
         };
       });
 
-    // ✅ NOUVEAU : Filtre par rareté
     if (this.rarityFilter !== 'all') {
       collectionCards = collectionCards.filter(card => card.rarityName === this.rarityFilter);
     }
 
-    // Tri
     collectionCards.sort((a, b) => {
       let valA, valB;
       
@@ -77,7 +85,6 @@ class DeckUI {
       return result * (this.sortOrder === 'desc' ? -1 : 1);
     });
     
-    // Génère les 6 slots du deck
     let deckSlotsHtml = '';
     for (let i = 0; i < deckSize; i++) {
         const cardId = deckCardIds[i];
@@ -107,7 +114,6 @@ class DeckUI {
             <div class="collection-header">
               <h3>Collection (Cartes disponibles)</h3>
               
-              <!-- ✅ NOUVEAU : Filtres de rareté -->
               <div class="filter-controls">
                 <span>Filtrer par rareté:</span>
                 <button class="filter-btn ${this.rarityFilter === 'all' ? 'active' : ''}" data-filter="all">Toutes</button>
@@ -157,11 +163,11 @@ class DeckUI {
           </div>
         </div>
         
-        <div id="card-tooltip" class="card-inspector"></div>
-      </div>
+        </div>
     `;
     
-    this.tooltipElement = this.container.querySelector('#card-tooltip');
+    // ✅ MODIFIÉ : Récupère le tooltip depuis le body
+    this.tooltipElement = document.getElementById('card-tooltip');
     
     this.attachEvents();
   }
@@ -185,6 +191,7 @@ class DeckUI {
     `;
   }
 
+  // ✅✅✅ MODIFIÉ : Génère le HTML pour le nouveau style de tooltip
   renderInspector(cardId) {
     this.inspectedCardId = cardId;
     
@@ -202,6 +209,7 @@ class DeckUI {
     const canAffordGold = player.gold >= upgradeCost;
     const hasEnoughCards = cardInCollection.count >= cardsNeeded;
 
+    // === Section Amélioration ===
     let upgradeHtml = '';
     if (upgradeCost) {
       let reason = "";
@@ -219,46 +227,63 @@ class DeckUI {
       }
       
       upgradeHtml = `
-        <h5>Prochain Niveau (Lvl ${currentLevel + 1})</h5>
-        <div class="stat-comparison">
-          ${comparisonHtml}
-        </div>
-        <button id="btn-upgrade-card" class="btn-upgrade" data-cost="${upgradeCost}" ${(!canAffordGold || !hasEnoughCards) ? 'disabled' : ''}>
-          Améliorer ${reason}
-          <div class="cost">
-            <span>${cardInCollection.count} / ${cardsNeeded} Cartes</span>
-            <span class="resource-icon">🪙</span>
-            <span class="resource-amount">${upgradeCost}</span>
+        <div class="upgrade-section">
+          <h5>Prochain Niveau (Lvl ${currentLevel + 1})</h5>
+          <div class="stat-comparison">
+            ${comparisonHtml}
           </div>
-        </button>
+          <button id="btn-upgrade-card" class="btn-upgrade" data-cost="${upgradeCost}" ${(!canAffordGold || !hasEnoughCards) ? 'disabled' : ''}>
+            Améliorer ${reason}
+            <div class="cost">
+              <span>${cardInCollection.count} / ${cardsNeeded} Cartes</span>
+              <span class="resource-icon">🪙</span>
+              <span class="resource-amount">${upgradeCost}</span>
+            </div>
+          </button>
+        </div>
       `;
     } else {
-      upgradeHtml = `<div class="cost">Niveau Maximum</div>`;
+      upgradeHtml = `<div class="upgrade-section"><div class="cost">Niveau Maximum</div></div>`;
     }
 
+    // === Section Stats ===
     let statsHtml = '';
     if (cardData.type === 'spell') {
       statsHtml = `
-        <span>Dégâts: ${currentEffect.value || 'N/A'}</span>
-        <span>Rayon: ${currentEffect.radius || 'N/A'}</span>
+        <div class="tooltip-stats">
+          <span>💥 Dégâts: ${currentEffect.value || 'N/A'}</span>
+          <span>📏 Rayon: ${currentEffect.radius || 'N/A'}</span>
+        </div>
       `;
     } else {
       statsHtml = `
-        <span>PV: ${currentStats.health || 'N/A'}</span>
-        <span>ATQ: ${currentStats.attack || 'N/A'}</span>
-        <span>Vit: ${currentStats.speed !== undefined ? currentStats.speed : 'N/A'}</span>
+        <div class="tooltip-stats">
+          <span>❤️ PV: ${currentStats.health || 'N/A'}</span>
+          <span>⚔️ ATQ: ${currentStats.attack || 'N/A'}</span>
+          <span>💨 Vit: ${currentStats.speed !== undefined ? currentStats.speed : 'N/A'}</span>
+        </div>
       `;
     }
+    
+    // === Infos de base ===
+    const elementIcon = this.elementIconMap[cardData.element || 'omni'];
+    const ownershipBadge = `<span class="tooltip-badge owned">✅ Possédée (Niv ${currentLevel})</span>`;
 
+    // === Assemblage final ===
     this.tooltipElement.innerHTML = `
-      <button id="btn-tooltip-close" class="tooltip-close-btn">✖️</button>
-      <h4>${cardData.name} <span class="cost">(${cardData.cost} Élixir)</span></h4>
-      <p class="rarity-${cardData.rarity}">${cardData.type} - ${cardData.element || 'omni'}</p>
-      <p>${cardData.description}</p>
-      <div class="card-stats">
-        ${statsHtml}
+      <div class="tooltip-header rarity-${cardData.rarity}">
+        <button id="btn-tooltip-close" class="tooltip-close-btn">✖️</button>
+        <h4>${cardData.icon} ${cardData.name}</h4>
+        ${ownershipBadge}
       </div>
-      <div class="upgrade-section">
+      <div class="tooltip-body">
+        <div class="tooltip-meta">
+          <span class="tooltip-element">${elementIcon} ${cardData.element || 'omni'}</span>
+          <span class="tooltip-cost">💧 ${cardData.cost} Élixir</span>
+          <span class="tooltip-rarity rarity-${cardData.rarity}">${cardData.rarity}</span>
+        </div>
+        <p class="tooltip-description">${cardData.description}</p>
+        ${statsHtml}
         ${upgradeHtml}
       </div>
     `;
@@ -276,8 +301,8 @@ class DeckUI {
             this.gameManager.questManager.progress('spendGold', cost);
         }
       }
-      this.render();
-      this.renderInspector(cardId);
+      this.render(); // Re-rend le DeckUI
+      this.renderInspector(cardId); // Re-rend l'inspecteur
     });
     
     this.tooltipElement.querySelector('#btn-tooltip-close')?.addEventListener('click', (e) => {
@@ -343,7 +368,6 @@ class DeckUI {
         });
     });
     
-    // ✅ NOUVEAU : Filtres de rareté
     this.container.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             this.gameManager.audioManager.play('click');
