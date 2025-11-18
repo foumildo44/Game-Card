@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Fantasy - Real-Time Arena</title>
+    <link rel="stylesheet" href="styles/main.css?v=2.0">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚔️</text></svg>">
+</head>
+<body>
+
+    <!-- ÉCRAN 1 : Menu Principal -->
+    <div id="main-menu-screen" class="screen">
+    </div>
+
+    <!-- ÉCRAN 2 : Tutoriel -->
+    <div id="tutorial-screen" class="screen hidden">
+    </div>
+
+    <!-- ÉCRAN 3 : Hub Principal -->
+    <div id="hub-screen" class="screen hidden">
+    </div>
+
+    <!-- ÉCRAN 4 : Jeu (Arène) -->
+    <div id="game-screen" class="screen hidden">
+        
+        <div id="game-timer">3:00</div>
+
+        <div id="arena">
+            
+            <div class="player-zone enemy-zone">
+                <div class="tower main-tower" id="enemy-main-tower">
+                    <div class="tower-hp-bar">
+                        <div class="tower-hp-fill" style="width: 100%;"></div>
+                    </div>
+                </div>
+                <div class="tower side-tower" id="enemy-side-tower-1">
+                    <div class="tower-hp-bar">
+                        <div class="tower-hp-fill" style="width: 100%;"></div>
+                    </div>
+                </div>
+                <div class="tower side-tower" id="enemy-side-tower-2">
+                    <div class="tower-hp-bar">
+                        <div class="tower-hp-fill" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bridge" id="bridge-1"></div>
+            <div class="bridge" id="bridge-2"></div>
+            
+            <div class="player-zone friendly-zone">
+                <div class="tower main-tower" id="player-main-tower">
+                    <div class="tower-hp-bar">
+                        <div class="tower-hp-fill" style="width: 100%;"></div>
+                    </div>
+                </div>
+                <div class="tower side-tower" id="player-side-tower-1">
+                    <div class="tower-hp-bar">
+                        <div class="tower-hp-fill" style="width: 100%;"></div>
+                    </div>
+                </div>
+                <div class="tower side-tower" id="player-side-tower-2">
+                    <div class="tower-hp-bar">
+                        <div class="tower-hp-fill" style="width: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="unit-container">
+            </div>
+
+        </div>
+
+        <div id="game-ui">
+
+            <div id="elixir-bar-container-v2">
+                <div class="elixir-orb-glow"></div>
+                <div class="elixir-orb">
+                    <div id="elixir-bar-fill-v2" class="elixir-fill" style="width: 30%;"></div>
+                    <div class="elixir-vignette"></div>
+                </div>
+                <div id="elixir-value-v2" class="elixir-text">3 / 10</div>
+            </div>
+
+            <div id="player-hand">
+            </div>
+
+            <div id="deck-info">
+                Prochaine carte...
+            </div>
+        </div>
+
+        <button id="btn-quit-battle" title="Quitter">X</button>
+    </div>
+
+    <!-- ÉCRAN 5 : Deck -->
+    <div id="deck-screen" class="screen hidden">
+    </div>
+    
+    <!-- ÉCRAN 6 : Boutique -->
+    <div id="shop-screen" class="screen hidden">
+    </div>
+
+    <!-- ÉCRAN 7 : Quêtes -->
+    <div id="quest-screen" class="screen hidden">
+    </div>
+    
+    <!-- ÉCRAN 8 : Encyclopédie -->
+    <div id="encyclopedia-screen" class="screen hidden">
+    </div>
+
+    <!-- ÉCRAN 9 : Route des Trophées -->
+<div id="trophy-road-screen" class="screen hidden">
+</div>
+
+<!-- ÉCRAN 10 : Paramètres -->
+<div id="settings-screen" class="screen hidden">
+</div>
+    
+    <!-- Modal Global -->
+    <div id="global-modal-overlay" class="modal-overlay hidden">
+        <div class="modal-content-v2">
+            <h2 id="modal-title">Titre du Modal</h2>
+            <div id="modal-body">
+                <p>Contenu du modal...</p>
+            </div>
+            <button id="modal-close-btn" class="modal-btn-close">Fermer</button>
+        </div>
+    </div>
+
+    <script type="module" src="src/main.js"></script>
+</body>
+</html>
