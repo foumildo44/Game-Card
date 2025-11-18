@@ -9,25 +9,29 @@
 </head>
 <body>
 
-    <!-- ÉCRAN 1 : Menu Principal -->
     <div id="main-menu-screen" class="screen">
     </div>
 
-    <!-- ÉCRAN 2 : Tutoriel -->
     <div id="tutorial-screen" class="screen hidden">
     </div>
 
-    <!-- ÉCRAN 3 : Hub Principal -->
     <div id="hub-screen" class="screen hidden">
     </div>
 
-    <!-- ÉCRAN 4 : Jeu (Arène) -->
     <div id="game-screen" class="screen hidden">
         
         <div id="game-timer">3:00</div>
 
         <div id="arena">
             
+            <div class="arena-ground" id="enemy-ground"></div>
+            <div class="arena-ground" id="friendly-ground"></div>
+            
+            <div id="arena-river"></div>
+
+            <div class="bridge" id="bridge-1"></div>
+            <div class="bridge" id="bridge-2"></div>
+
             <div class="player-zone enemy-zone">
                 <div class="tower main-tower" id="enemy-main-tower">
                     <div class="tower-hp-bar">
@@ -45,9 +49,6 @@
                     </div>
                 </div>
             </div>
-
-            <div class="bridge" id="bridge-1"></div>
-            <div class="bridge" id="bridge-2"></div>
             
             <div class="player-zone friendly-zone">
                 <div class="tower main-tower" id="player-main-tower">
@@ -69,11 +70,9 @@
 
             <div id="unit-container">
             </div>
-
         </div>
 
         <div id="game-ui">
-
             <div id="elixir-bar-container-v2">
                 <div class="elixir-orb-glow"></div>
                 <div class="elixir-orb">
@@ -94,31 +93,24 @@
         <button id="btn-quit-battle" title="Quitter">X</button>
     </div>
 
-    <!-- ÉCRAN 5 : Deck -->
     <div id="deck-screen" class="screen hidden">
     </div>
     
-    <!-- ÉCRAN 6 : Boutique -->
     <div id="shop-screen" class="screen hidden">
     </div>
 
-    <!-- ÉCRAN 7 : Quêtes -->
     <div id="quest-screen" class="screen hidden">
     </div>
     
-    <!-- ÉCRAN 8 : Encyclopédie -->
     <div id="encyclopedia-screen" class="screen hidden">
     </div>
 
-    <!-- ÉCRAN 9 : Route des Trophées -->
-<div id="trophy-road-screen" class="screen hidden">
-</div>
+    <div id="trophy-road-screen" class="screen hidden">
+    </div>
 
-<!-- ÉCRAN 10 : Paramètres -->
-<div id="settings-screen" class="screen hidden">
-</div>
+    <div id="settings-screen" class="screen hidden">
+    </div>
     
-    <!-- Modal Global -->
     <div id="global-modal-overlay" class="modal-overlay hidden">
         <div class="modal-content-v2">
             <h2 id="modal-title">Titre du Modal</h2>
@@ -127,6 +119,9 @@
             </div>
             <button id="modal-close-btn" class="modal-btn-close">Fermer</button>
         </div>
+    </div>
+
+    <div id="card-tooltip" class="encyclopedia-tooltip" style="display: none; position: fixed; z-index: 1000; left: 50%; top: 50%; transform: translate(-50%, -50%);">
     </div>
 
     <script type="module" src="src/main.js"></script>
